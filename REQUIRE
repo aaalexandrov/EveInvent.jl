@@ -1,0 +1,8 @@
+julia 0.5
+Requests
+HttpServer
+URIParser
+JSON
+LightXML
+DataFrames
+YAML

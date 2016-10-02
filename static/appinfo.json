@@ -1,0 +1,6 @@
+{
+  "clientID": "13e88dc89c364981a0b1d074e5d6f1f3",
+  "callbackURL": "http://localhost:8321",
+  "scope": "publicData characterAssetsRead characterSkillsRead",
+  "userAgent": "EveInvent script, greyalex2003@yahoo.com"
+}
