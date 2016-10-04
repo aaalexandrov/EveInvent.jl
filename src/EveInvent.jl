@@ -638,7 +638,7 @@ function find_optimal(checkBPOs::Bool = true)
 	rows = map(n->parse(Int, n), split(strip(readline()), [' ', ',']; keep = false))
 	plan = [opt[rows[i]] for i = 1:length(rows)]
 	print_plan(plan)
-	print_plan(plan, "result.txt")
+	print_plan(plan, joinpath(cacheDir, "result.txt"))
 end
 
 function add_to_plan(product, decryptor, number, plan = Array(Any, 0))
