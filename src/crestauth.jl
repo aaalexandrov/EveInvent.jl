@@ -89,7 +89,7 @@ function request_access(endpoint::AbstractString, appInfo::Dict)
 		# We have an auth token that still has half of its validity period to go
 		return auth
 	end
-	if auth == nothing || !haskey(auth, "refresh_token")
+	if auth == nothing || !haskey(auth, "refresh_token") || get(appInfo, "secretKey", "") == ""
 		authData = CrestAuthData("crestauth.jl$(rand(UInt))")
 		uri = URIParser.URI(appInfo["callbackURL"])
 		port = uri.port
