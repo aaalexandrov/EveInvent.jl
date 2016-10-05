@@ -25,7 +25,8 @@ global charSkills, charBlueprints, charBPOTypes
 global crestAuth = nothing
 global apiAuth
 
-global dataDir = joinpath(dirname(dirname(@__FILE__)), "static")
+global dataDir = joinpath(dirname(dirname(@__FILE__)), "deps")
+global cfgDir = joinpath(dataDir, "cfg")
 global cacheDir = joinpath(dirname(dirname(@__FILE__)), "cache")
 
 const priceTimeout = 6.0
@@ -259,8 +260,8 @@ get_crest_authorization() = request_access(get_service(["authEndpoint"]), config
 get_api_authorization() = Dict("accessToken"=>crestAuth["access_token"])
 
 function get_config()
-	config = json_read(joinpath(dataDir,"config.json"))
-	config["appInfo"] = json_read(joinpath(dataDir, "appinfo.json"))
+	config = json_read(joinpath(cfgDir,"config.json"))
+	config["appInfo"] = json_read(joinpath(cfgDir, "appinfo.json"))
 	set_api_user_agent(config["appInfo"]["userAgent"])
 	return config
 end
