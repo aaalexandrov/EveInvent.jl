@@ -56,12 +56,12 @@ function request_access_url(authData::CrestAuthData, appInfo::Dict)
 end
 
 function open_browser(url::AbstractString)
-    if is_windows()
-	    url = replace(url, "&", "^&") # escape & on windows
-	    run(`cmd /c start $url`)
-    else
-      spawn(`xdg-open "$url"`)
-    end
+	if is_windows()
+		url = replace(url, "&", "^&") # escape & on windows
+		run(`cmd /c start $url`)
+	else
+		spawn(`xdg-open "$url"`)
+	end
 end
 
 function request_authorization_token(endpoint::AbstractString, appInfo::Dict, code::AbstractString, refresh::Bool)

@@ -241,11 +241,11 @@ function get_decryptors_crest()
 		d = Dict("name"=>jd["name"], "id"=>jd["id"], "attributes"=>attr)
 		push!(decr, d)
 	end
-  return decr
+	return decr
 end
 
 function get_decryptors()
-  decr = get_decryptors_crest()
+	decr = get_decryptors_crest()
 	noDecrName = "No Decryptor"
 	noDecrId = add_fake_item(noDecrName)
 	itemTypes[noDecrId] = Dict("name"=>noDecrName, "id"=>noDecrId)
@@ -445,13 +445,13 @@ function invention_result(targetID::Int, decryptor, systemID::Int=config["invent
 	for m in invention["materials"]
 		materials[m["typeID"]] = m["quantity"]
 	end
-  materials[decryptor["id"]] = 1
+	materials[decryptor["id"]] = 1
 	system = industrySystems[systemID]
 	taxRate = get_tax_rate(system)
 	copyCost = invention_copy_install_cost(1.0, t1BP["blueprintTypeID"], get_cost_index(system, "Copying"), taxRate)
 	installCost = invention_copy_install_cost(1.0, targetID, get_cost_index(system, "Invention"), taxRate)
 	materialCost = material_cost(materials)
-	attemptsPerCopy = baseRuns * product["quantity"] / baseProbability
+	attemptsPerCopy = 1 / (baseProbability * baseRuns * product["quantity"])
 	return resultItem, (materialCost + installCost + copyCost) * attemptsPerCopy
 end
 
@@ -531,10 +531,10 @@ function optimal_invention(checkBPOs::Bool = true)
 			end
 		end
 		profit, decr = optimal_invention(ship)
-		isFrigate = any(t2BP["activities"]["manufacturing"]["skills"]) do s
-						itemTypes[s["typeID"]]["name"] == "Advanced Small Ship Construction"
-					end
 		if profit > 0.0
+			isFrigate = any(t2BP["activities"]["manufacturing"]["skills"]) do s
+							itemTypes[s["typeID"]]["name"] == "Advanced Small Ship Construction"
+						end
 			number = isFrigate? 10 : 1
 			push!(result, Dict("typeID"=>ship, "decryptor"=>decr, "profit"=>profit*number, "number"=>number))
 		end
@@ -595,7 +595,7 @@ function print_optimal(opt::Array; io::IO = STDOUT, markup::Bool = false)
 end
 
 function print_plan(plan, filename::AbstractString = "")
-  io = STDOUT
+	io = STDOUT
 	if !isempty(filename)
 		io = open(filename, "w+")
 	end
