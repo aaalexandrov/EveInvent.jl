@@ -33,10 +33,10 @@ const priceTimeout = 6.0
 
 id_from_url(url::AbstractString) = parse(Int, rsplit(url, '/'; limit = 2, keep = false)[end])
 
-function access_path(o, p::Array)
+function access_path(o, p::Array, default = nothing)
 	for i in p
 		if !(isa(o, Associative) && haskey(o, i) || isa(o, AbstractArray) && 1 <= i <= length(o))
-			return nothing
+			return default
 		end
 		o = o[i]
 	end
@@ -288,7 +288,9 @@ function get_inventable_blueprints(groupTypes::Dict{Int})
 			t2BlueprintID = prod["typeID"]
 			t2Blueprint = get(blueprints, t2BlueprintID, nothing)
 			t2Blueprint == nothing && continue
-			t2Product = get_products(t2Blueprint, "manufacturing")[1]["typeID"]
+			t2Products = get_products(t2Blueprint, "manufacturing")
+			t2Products == nothing && continue
+			t2Product = t2Products[1]["typeID"]
 			if haskey(groupTypes, t2Product) && haskey(blueprintTypes, b) # need to check if we're looking at a blueprint because of the t3 inventable research items
 				push!(groupPrints, t2Product)
 			end
@@ -398,7 +400,7 @@ function get_cost_index(system, activityName::AbstractString)
 	filter(c->c["activityName"]==activityName, system["systemCostIndices"])[1]["costIndex"]
 end
 
-get_tax_rate(system) = systemFacilities[system["solarSystem"]["id"]][1]["tax"]
+get_tax_rate(system) = access_path(systemFacilities, [system["solarSystem"]["id"], 1, "tax"], 0.1)
 
 function blueprint_materials(runs::Float64, blueprintItem, systemID::Int)
 	blueprint = blueprints[blueprintItem["typeID"]]
